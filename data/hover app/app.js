@@ -142,6 +142,7 @@ hoverButton.addEventListener("click", function(){
         var confidence = api_data[current_img_idx].response.objects[box_idx].confidence
         var infoString = "Detected Object:" + item + " with confidence:" + confidence;
         $('#information').text(infoString);
+        responsiveVoice.speak(document.getElementById("information").textContent);
       })
     }
 
