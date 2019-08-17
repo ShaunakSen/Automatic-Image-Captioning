@@ -34,7 +34,7 @@ var hoverEffect = function(trigger) {
         // Use event.pageX / event.pageY here
         mouseX = event.pageX;
         mouseY = event.pageY;
-        console.log(mouseX, mouseY);
+        //console.log(mouseX, mouseY);
     }
 };
 
@@ -47,12 +47,12 @@ var current_img_idx = null
 
 $.getJSON("./azure_api.json", function(data){
   api_data = data;
-
+  console.log(api_data)
   // api data received
 
   // load corresponding image
   // set img idx
-  current_img_idx = 0;
+  current_img_idx = 1;
   // draw bounding boxes
   processImage(current_img_idx)
   // build hover effect
@@ -60,13 +60,9 @@ $.getJSON("./azure_api.json", function(data){
 
 });
 
-var buildHoverEffect = function(img_idx){
-
-}
-
+var boundingBoxClasses = null;
 
 var processImage = function(img_idx){
-  console.log(api_data[img_idx]);
 
   var objects = api_data[img_idx].response.objects;
 
@@ -89,9 +85,13 @@ var processImage = function(img_idx){
       'width': box.w + "px",
       'height': box.h + "px"
     });
-  })
-};
+  });
 
+  // set the bounding box classes for hover effect
+  boundingBoxClasses = document.getElementsByClassName("box-element");
+  console.log(boundingBoxClasses);
+
+};
 
 
 
@@ -99,18 +99,34 @@ var hoverButton = document.getElementById("hover-button");
 
 var hoverEffectOn = false;
 
+
+
 hoverButton.addEventListener("click", function(){
   if (hoverEffectOn) {
     hoverButton.innerHTML = "Start Hover Effect";
     hoverEffectOn = false;
-    hoverEffect(false)
+    //hoverEffect(false)
   } else {
     hoverButton.innerHTML = "Stop Hover Effect";
     hoverEffectOn = true;
-    hoverEffect(true);
+    //hoverEffect(true);
 
-    // mouseX, mouseY set
-    buildHoverEffect();
+    // build hover effect
+    var numBoxes = api_data[current_img_idx].response.objects.length;
+
+    console.log(numBoxes);
+
+    for (var i=0; i<numBoxes; ++i){
+      var boxElement = document.getElementById("box" + i);
+      boxElement.addEventListener("click", function(){
+        var box_idx = parseInt(this.id[this.id.length-1])
+        // populate info for this box_id
+        var item = api_data[current_img_idx].response.objects[box_idx].object;
+        var confidence = api_data[current_img_idx].response.objects[box_idx].confidence
+        var infoString = "Detected Object:" + item + " with confidence:" + confidence;
+        $('#information').text(infoString);
+      })
+    }
 
   }
 });
