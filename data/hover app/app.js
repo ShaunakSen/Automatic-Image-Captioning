@@ -49,12 +49,10 @@ $.getJSON("./azure_api.json", function(data){
   api_data = data;
   console.log(api_data)
   // api data received
+  
 
-  // load corresponding image
-  // set img idx
-  current_img_idx = 1;
-  // draw bounding boxes
-  processImage(current_img_idx)
+  //set initial value of current index
+  
   // build hover effect
 
 
@@ -63,6 +61,11 @@ $.getJSON("./azure_api.json", function(data){
 var boundingBoxClasses = null;
 
 var processImage = function(img_idx){
+
+  console.log("Drawing boxes for img no:", img_idx);
+
+  // clear the DOM
+  $('.box-element').remove();
 
   var objects = api_data[img_idx].response.objects;
 
@@ -102,10 +105,22 @@ var hoverEffectOn = false;
 
 
 hoverButton.addEventListener("click", function(){
+
+  // load the selected image
+  var select = document.getElementById('image-select')
+  current_img_idx = select.options[select.selectedIndex].text - 1;
+  var url_img_idx = current_img_idx + 1
+  $('#main-img').attr('src', 'https://raw.githubusercontent.com/ShaunakSen/Automatic-Image-Captioning/master/img/diag' + url_img_idx + '.png');
+  // draw bounding boxes
+  processImage(current_img_idx)
+
   if (hoverEffectOn) {
     hoverButton.innerHTML = "Start Hover Effect";
     hoverEffectOn = false;
     //hoverEffect(false)
+    // remove bounding boxes
+    $('.box-element').remove();
+
   } else {
     hoverButton.innerHTML = "Stop Hover Effect";
     hoverEffectOn = true;
@@ -114,11 +129,13 @@ hoverButton.addEventListener("click", function(){
     // build hover effect
     var numBoxes = api_data[current_img_idx].response.objects.length;
 
-    console.log(numBoxes);
+    console.log("Num boxes:", numBoxes);
 
     for (var i=0; i<numBoxes; ++i){
       var boxElement = document.getElementById("box" + i);
-      boxElement.addEventListener("click", function(){
+      boxElement.addEventListener("mouseover", function(){
+        // clear the initial text 
+        $('#information').text('');
         var box_idx = parseInt(this.id[this.id.length-1])
         // populate info for this box_id
         var item = api_data[current_img_idx].response.objects[box_idx].object;
