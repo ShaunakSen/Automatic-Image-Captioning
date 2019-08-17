@@ -1,4 +1,4 @@
-## Automatic-Image-Captioning
+## Automatic Image Captioning
 
 This is an Automatic Image Captioning System based on the model
 architecture described by Marc Tanti, et al. in their 2017 
