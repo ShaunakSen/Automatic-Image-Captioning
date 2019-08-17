@@ -3,14 +3,16 @@ img{
     top: -8px;
     left: -8px;
 }
-.tag {
-float: left;
-position: absolute;
-top: 10;
-left: 10;
-z-index: 1000;
-border: 5px solid rgb(37, 107, 60);
-font-weight: bold;
-height: 50px;
-width: 50px;
+
+
+.box-element{
+    float: left;
+    position: absolute;
+    z-index: 1000;
+    border: 2px solid rgb(37, 107, 60);
+}
+
+.below-image-container{
+    margin-top: 400px;
+    margin-left: 20px;
 }
