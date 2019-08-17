@@ -34,6 +34,24 @@ var hoverEffect = function(trigger) {
 };
 
 
+// GET API DATA
+
+var api_data = null;
+
+$.getJSON("./azure_api.json", function(data){
+  api_data = data;
+
+  // api data received
+  // load corresponding image
+  processImage(0)
+});
+
+
+var processImage = function(img_idx){
+  console.log(api_data[img_idx]);
+}
+
+
 
 var hoverButton = document.getElementById("hover-button");
 
